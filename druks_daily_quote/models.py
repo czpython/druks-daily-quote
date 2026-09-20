@@ -13,12 +13,11 @@ class Quote(Base):
     day: Mapped[date] = mapped_column(unique=True)
     text: Mapped[str]
     author: Mapped[str]
-    reason: Mapped[str]
 
     @classmethod
-    async def record(cls, *, day: date, text: str, author: str, reason: str) -> None:
+    async def record(cls, *, day: date, text: str, author: str) -> None:
         # One quote a day: a second run today replaces the first.
-        values = {"day": day, "text": text, "author": author, "reason": reason}
+        values = {"day": day, "text": text, "author": author}
         await db_session().execute(
             insert(cls)
             .values(**values)

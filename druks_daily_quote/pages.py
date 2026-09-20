@@ -18,7 +18,6 @@ async def overview():
         blocks=[
             ui.Quote(text=today.text),
             ui.Text(f"— {today.author}"),
-            ui.Text(today.reason),
         ],
     )
 

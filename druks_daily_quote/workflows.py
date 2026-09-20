@@ -41,4 +41,4 @@ class PickQuote(Workflow):
 
     @step
     async def record(self, choice: QuoteChoice) -> None:
-        await Quote.record(day=datetime.now(UTC).date(), **choice.model_dump())
+        await Quote.record(day=datetime.now(UTC).date(), text=choice.text, author=choice.author)
