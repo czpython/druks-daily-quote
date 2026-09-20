@@ -20,6 +20,6 @@ class DailyQuote(App):
     choose = Agent(
         prompt="daily_quote/choose.md",
         contract=QuoteChoice,
-        description="Choose one quote and give one short reason.",
+        description="Choose one quote from the page.",
         include_plugins=False,
     )

@@ -5,8 +5,8 @@ page of quotes through a browser you signed into, asks an agent to pick one, and
 shows it on its Overview page.
 
 It is a demo app, so it stays small. In about 110 lines it uses a schedule, a
-browser session, an agent with a typed contract, its own table, two declared
-pages, and the activity feed.
+browser session, an agent with a typed contract, its own table and two declared
+pages.
 
 ## What a run does
 
@@ -14,12 +14,12 @@ pages, and the activity feed.
 2. The run borrows the browser session for `quotes.toscrape.com`, Zyte's
    scraping sandbox, and reads the quotes on page one. Any username and password
    work there, and you sign in once through the Druks login window.
-3. An agent picks one quote and says why.
-4. The quote is stored for that day, and the reason lands on the activity feed.
+3. An agent picks one quote.
+4. The quote is stored for that day.
 
 ## What you see
 
-- **Overview** shows today's quote and its author.
+- **Overview** shows the day and its quote.
 - **History** lists the quotes before today.
 
 Both pages are declared in Python. The app ships no JavaScript.

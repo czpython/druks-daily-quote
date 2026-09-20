@@ -8,17 +8,13 @@ async def overview():
     quotes = await Quote.list_newest_first()
     if not quotes:
         return ui.Page(
-            "Daily quote",
-            blocks=[ui.EmptyState("No quote yet", description="The next run picks one.")],
+            "No quote yet",
+            blocks=[ui.EmptyState("Nothing picked", description="The next run picks one.")],
         )
     today = quotes[0]
     return ui.Page(
-        "Daily quote",
-        description=today.day.isoformat(),
-        blocks=[
-            ui.Quote(text=today.text),
-            ui.Text(f"— {today.author}"),
-        ],
+        today.day.strftime("%d %B %Y"),
+        blocks=[ui.Markdown(f"## {today.text}\n\n**— {today.author}**")],
     )
 
 

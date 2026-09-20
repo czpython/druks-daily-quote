@@ -19,7 +19,6 @@ class PickQuote(Workflow):
         quotes = await self.read_quotes()
         choice = await DailyQuote.choose(quotes=quotes)
         await self.record(choice)
-        await self.announce("quote.picked", **choice.model_dump())
 
     @step
     async def read_quotes(self) -> list[dict[str, str]]:
