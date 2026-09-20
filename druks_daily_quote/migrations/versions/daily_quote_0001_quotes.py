@@ -14,6 +14,7 @@ def upgrade() -> None:
         sa.Column("day", sa.Date(), nullable=False),
         sa.Column("text", sa.String(), nullable=False),
         sa.Column("author", sa.String(), nullable=False),
+        sa.Column("reason", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("day"),
     )

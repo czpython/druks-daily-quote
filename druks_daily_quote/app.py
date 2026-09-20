@@ -9,7 +9,8 @@ from druks_daily_quote.contracts import QuoteChoice
 class DailyQuote(App):
     name = "daily_quote"
     icon = "quote"
-    description = "Pick a daily quote and keep the ones you like."
+    description = "A quote a day, read from a browser you signed into."
+    navigation = ["overview", "history"]
 
     quotes = BrowserSession(site="quotes.toscrape.com", persist=True)
 

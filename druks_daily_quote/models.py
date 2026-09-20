@@ -1,8 +1,8 @@
 from datetime import date
 
 from druks.db import Base, db_session
-from druks.workflows import Subject, SubjectSummary
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Mapped, mapped_column
 
 
@@ -13,27 +13,18 @@ class Quote(Base):
     day: Mapped[date] = mapped_column(unique=True)
     text: Mapped[str]
     author: Mapped[str]
+    reason: Mapped[str]
 
     @classmethod
-    async def keep(cls, *, day: date, text: str, author: str) -> None:
-        db_session().add(cls(day=day, text=text, author=author))
-        await db_session().flush()
-
-
-class Day(Subject):
-    """The morning a run is about. Its id is the date, so the run needs no row of
-    its own, and a quote row exists only for a day whose quote you kept."""
+    async def record(cls, *, day: date, text: str, author: str, reason: str) -> None:
+        # One quote a day: a second run today replaces the first.
+        values = {"day": day, "text": text, "author": author, "reason": reason}
+        await db_session().execute(
+            insert(cls)
+            .values(**values)
+            .on_conflict_do_update(index_elements=[cls.day], set_=values)
+        )
 
     @classmethod
-    async def list_summaries(cls, account_id: str | None) -> list[SubjectSummary]:
-        quotes = await db_session().scalars(select(Quote).order_by(Quote.day.desc()))
-        kept = {
-            quote.day.isoformat(): f"{quote.text} — {quote.author}" for quote in quotes
-        }
-        # A day whose run still waits for you has kept nothing yet, so the board
-        # needs the open runs beside the quotes.
-        waiting = [day.id for day in await cls.list_open()]
-        return [
-            SubjectSummary(id=day, key=day, title=kept.get(day))
-            for day in sorted({*kept, *waiting}, reverse=True)
-        ]
+    async def list_newest_first(cls) -> list["Quote"]:
+        return list(await db_session().scalars(select(cls).order_by(cls.day.desc())))
