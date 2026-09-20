@@ -27,11 +27,13 @@ class Day(Subject):
     @classmethod
     async def list_summaries(cls, account_id: str | None) -> list[SubjectSummary]:
         quotes = await db_session().scalars(select(Quote).order_by(Quote.day.desc()))
+        kept = {
+            quote.day.isoformat(): f"{quote.text} — {quote.author}" for quote in quotes
+        }
+        # A day whose run still waits for you has kept nothing yet, so the board
+        # needs the open runs beside the quotes.
+        waiting = [day.id for day in await cls.list_open()]
         return [
-            SubjectSummary(
-                id=quote.day.isoformat(),
-                key=quote.day.isoformat(),
-                title=f"{quote.text} — {quote.author}",
-            )
-            for quote in quotes
+            SubjectSummary(id=day, key=day, title=kept.get(day))
+            for day in sorted({*kept, *waiting}, reverse=True)
         ]
