@@ -12,6 +12,8 @@ from druks_daily_quote.models import Day, Quote
 class KeepQuote(Gate):
     name = "keep_quote"
     action: Literal["keep", "skip"]
+    # The review box always offers a note. Declare it, or the platform drops it.
+    note: str = ""
 
 
 class PickQuote(Workflow):
@@ -36,7 +38,7 @@ class PickQuote(Workflow):
 
         if reply.action == "keep":
             await self.keep_quote(choice)
-            await self.announce("quote.kept", **choice.model_dump())
+            await self.announce("quote.kept", note=reply.note, **choice.model_dump())
 
     @step
     async def read_quotes(self) -> list[dict[str, str]]:

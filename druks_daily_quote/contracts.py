@@ -7,8 +7,9 @@ class QuoteChoice(AgentOutput):
     reason: str
 
     def to_artifact(self) -> dict[str, str]:
+        # The card carries the question: an in-app gate never shows its label.
         return {
             "kind": "markdown",
-            "title": f"Quote by {self.author}",
-            "content": f"{self.text}\n\n— {self.author}\n\n{self.reason}",
+            "title": "Keep this quote?",
+            "content": f"> {self.text}\n>\n> — {self.author}\n\n{self.reason}",
         }
