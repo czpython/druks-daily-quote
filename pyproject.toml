@@ -1,0 +1,13 @@
+[project]
+name = "druks-daily-quote"
+version = "0.0.1"
+description = "Pick a daily quote for your approval."
+requires-python = ">=3.11"
+dependencies = ["druks>=0.2.0", "playwright>=1.55"]
+
+[project.entry-points."druks.apps"]
+daily_quote = "druks_daily_quote.app:DailyQuote"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
