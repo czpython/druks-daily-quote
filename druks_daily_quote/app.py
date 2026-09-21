@@ -12,13 +12,13 @@ class DailyQuote(App):
     description = "A quote a day, read from a browser you signed into."
     navigation = ["overview", "history"]
 
-    quotes = BrowserSession(site="quotes.toscrape.com", persist=True)
+    toscrape = BrowserSession(site="quotes.toscrape.com", persist=True)
 
     class Settings(AppSettings):
         quote_count: int = Field(default=5, ge=1, le=10, title="Quotes to consider")
 
-    choose = Agent(
-        prompt="daily_quote/choose.md",
+    pick = Agent(
+        prompt="daily_quote/pick.md",
         contract=QuoteChoice,
         description="Choose one quote from the page.",
         include_plugins=False,

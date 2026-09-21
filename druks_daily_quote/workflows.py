@@ -17,14 +17,14 @@ class PickQuote(Workflow):
 
     async def run_multistep(self) -> None:
         quotes = await self.read_quotes()
-        choice = await DailyQuote.choose(quotes=quotes)
+        choice = await DailyQuote.pick(quotes=quotes)
         await self.record(choice)
 
     @step
     async def read_quotes(self) -> list[dict[str, str]]:
         settings = await DailyQuote.settings()
 
-        async with DailyQuote.quotes.playwright() as browser:
+        async with DailyQuote.toscrape.playwright() as browser:
             page = await browser.new_page()
             await page.goto("https://quotes.toscrape.com/", wait_until="domcontentloaded")
             if not await page.locator('a[href="/logout"]').count():
