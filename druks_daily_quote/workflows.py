@@ -2,12 +2,11 @@ from druks.browser import BrowserSessionSignedOutError
 from druks.workflows import Workflow, step
 
 from druks_daily_quote.app import DailyQuote
-from druks_daily_quote.contracts import QuoteChoice
 from druks_daily_quote.models import Quote
 
 
 class PickQuote(Workflow):
-    every = "0 9 * * *"
+    every = "0 0 * * *"
 
     @classmethod
     async def dispatch(cls) -> str:
@@ -16,7 +15,9 @@ class PickQuote(Workflow):
     async def run_multistep(self) -> None:
         quotes = await self.read_quotes()
         choice = await DailyQuote.pick(quotes=quotes)
-        await self.record(choice)
+        if not 1 <= choice.number <= len(quotes):
+            raise ValueError(f"the agent answered {choice.number} for {len(quotes)} quotes")
+        await self.record(quotes[choice.number - 1])
 
     @step
     async def read_quotes(self) -> list[dict[str, str]]:
@@ -42,5 +43,5 @@ class PickQuote(Workflow):
         return (fresh or found)[: settings.quote_count]
 
     @step
-    async def record(self, choice: QuoteChoice) -> None:
-        await Quote.record(text=choice.text, author=choice.author)
+    async def record(self, quote: dict[str, str]) -> None:
+        await Quote.record(text=quote["text"], author=quote["author"])

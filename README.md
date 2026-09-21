@@ -1,6 +1,6 @@
 # daily-quote
 
-A small [Druks](https://github.com/czpython/druks) app. Every morning it reads a
+A small [Druks](https://github.com/czpython/druks) app. Every day it reads a
 page of quotes through a browser you signed into, asks an agent to pick one, and
 shows it on its Overview page.
 
@@ -10,12 +10,13 @@ page.
 
 ## What a run does
 
-1. A schedule starts the run each morning.
+1. A schedule starts the run at midnight.
 2. The run borrows the browser session for `quotes.toscrape.com`, Zyte's
    scraping sandbox, and reads the quotes on page one, leaving out the ones it
    has picked before. Any username and password work there, and you sign in once
    through the Druks login window.
-3. An agent picks one quote.
+3. An agent answers with the number of the quote it chose, so the wording
+   stored is the site's own.
 4. The pick is stored.
 
 ## What you see
