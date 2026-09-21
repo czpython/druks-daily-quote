@@ -1,5 +1,3 @@
-from datetime import UTC, datetime
-
 from druks.browser import BrowserSessionSignedOutError
 from druks.workflows import Workflow, step
 
@@ -40,4 +38,4 @@ class PickQuote(Workflow):
 
     @step
     async def record(self, choice: QuoteChoice) -> None:
-        await Quote.record(day=datetime.now(UTC).date(), text=choice.text, author=choice.author)
+        await Quote.record(text=choice.text, author=choice.author)

@@ -15,12 +15,12 @@ pages.
    scraping sandbox, and reads the quotes on page one. Any username and password
    work there, and you sign in once through the Druks login window.
 3. An agent picks one quote.
-4. The quote is stored for that day.
+4. The pick is stored.
 
 ## What you see
 
-- **Overview** shows the day and its quote.
-- **History** lists the quotes before today.
+- **Overview** shows the newest quote, and the three before it.
+- **History** lists every quote the app has picked.
 
 Both pages are declared in Python. The app ships no JavaScript.
 
