@@ -21,6 +21,7 @@ class PickQuote(Workflow):
     @step
     async def read_quotes(self) -> list[dict[str, str]]:
         settings = await DailyQuote.settings()
+        picked = {quote.text for quote in await Quote.list_newest_first()}
 
         async with DailyQuote.toscrape.playwright() as browser:
             page = await browser.new_page()
@@ -28,13 +29,17 @@ class PickQuote(Workflow):
             if not await page.locator('a[href="/logout"]').count():
                 raise BrowserSessionSignedOutError("Sign in to Quotes to Scrape again.")
             quotes = page.locator(".quote")
-            return [
+            found = [
                 {
                     "text": await quotes.nth(index).locator(".text").inner_text(),
                     "author": await quotes.nth(index).locator(".author").inner_text(),
                 }
-                for index in range(min(settings.quote_count, await quotes.count()))
+                for index in range(await quotes.count())
             ]
+
+        # Page one holds ten quotes, so it starts repeating once they are all picked.
+        fresh = [quote for quote in found if quote["text"] not in picked]
+        return (fresh or found)[: settings.quote_count]
 
     @step
     async def record(self, choice: QuoteChoice) -> None:

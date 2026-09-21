@@ -12,8 +12,9 @@ pages.
 
 1. A schedule starts the run each morning.
 2. The run borrows the browser session for `quotes.toscrape.com`, Zyte's
-   scraping sandbox, and reads the quotes on page one. Any username and password
-   work there, and you sign in once through the Druks login window.
+   scraping sandbox, and reads the quotes on page one, leaving out the ones it
+   has picked before. Any username and password work there, and you sign in once
+   through the Druks login window.
 3. An agent picks one quote.
 4. The pick is stored.
 
