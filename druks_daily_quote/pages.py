@@ -18,16 +18,14 @@ async def overview():
     quotes = await Quote.list_newest_first()
     if not quotes:
         return ui.Page(
-            "No quote yet",
+            "Today",
             blocks=[ui.EmptyState("Nothing picked", description="The next run picks one.")],
         )
     latest, *earlier = quotes
-    blocks = [ui.Section(blocks=[quote_cards(earlier[:3])], title="Earlier")] if earlier else []
-    return ui.Page(
-        latest.text,
-        description=f"{latest.author} · {latest.picked_at:%d %B %Y}",
-        blocks=blocks,
-    )
+    blocks = [ui.Card(title=latest.text, description=f"— {latest.author}")]
+    if earlier:
+        blocks.append(ui.Section(blocks=[quote_cards(earlier[:3])], title="Earlier"))
+    return ui.Page("Today", description=f"{latest.picked_at:%d %B %Y}", blocks=blocks)
 
 
 @ui.page("/history")
