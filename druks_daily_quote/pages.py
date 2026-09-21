@@ -3,16 +3,6 @@ from druks import ui
 from druks_daily_quote.models import Quote
 
 
-def quote_cards(quotes: list[Quote]) -> ui.Cards:
-    return ui.Cards(
-        cards=[
-            ui.Card(title=quote.text, description=f"{quote.author} · {quote.picked_at:%d %b %Y}")
-            for quote in quotes
-        ],
-        empty=ui.EmptyState("No quotes yet"),
-    )
-
-
 @ui.page("/")
 async def overview():
     quotes = await Quote.list_newest_first()
@@ -24,14 +14,14 @@ async def overview():
     latest, *earlier = quotes
     blocks = [ui.Card(title=latest.text, description=f"— {latest.author}")]
     if earlier:
-        blocks.append(ui.Section(blocks=[quote_cards(earlier[:3])], title="Earlier"))
+        cards = ui.Cards(
+            cards=[
+                ui.Card(
+                    title=quote.text,
+                    description=f"{quote.author} · {quote.picked_at:%d %b %Y}",
+                )
+                for quote in earlier
+            ]
+        )
+        blocks.append(ui.Section(blocks=[cards], title="Earlier"))
     return ui.Page("Today", description=f"{latest.picked_at:%d %B %Y}", blocks=blocks)
-
-
-@ui.page("/history")
-async def history():
-    return ui.Page(
-        "History",
-        description="Every quote this app has picked.",
-        blocks=[quote_cards(await Quote.list_newest_first())],
-    )

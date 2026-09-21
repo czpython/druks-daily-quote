@@ -5,8 +5,8 @@ page of quotes through a browser you signed into, asks an agent to pick one, and
 shows it on its Overview page.
 
 It is a demo app, so it stays small. In about 110 lines it uses a schedule, a
-browser session, an agent with a typed contract, its own table and two declared
-pages.
+browser session, an agent with a typed contract, its own table and a declared
+page.
 
 ## What a run does
 
@@ -20,10 +20,10 @@ pages.
 
 ## What you see
 
-- **Overview** shows the newest quote, and the three before it.
-- **History** lists every quote the app has picked.
+**Overview** shows the newest quote, and every quote before it under
+**Earlier**.
 
-Both pages are declared in Python. The app ships no JavaScript.
+The page is declared in Python. The app ships no JavaScript.
 
 ## Install
 

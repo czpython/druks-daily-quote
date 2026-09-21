@@ -10,7 +10,7 @@ class DailyQuote(App):
     name = "daily_quote"
     icon = "quote"
     description = "A quote a day, read from a browser you signed into."
-    navigation = ["overview", "history"]
+    navigation = ["overview"]
 
     toscrape = BrowserSession(site="quotes.toscrape.com", persist=True)
 
