@@ -22,7 +22,7 @@ class PickQuote(Workflow):
     @step
     async def read_quotes(self) -> list[dict[str, str]]:
         settings = await DailyQuote.settings()
-        picked = {quote.text for quote in await Quote.list_newest_first()}
+        picked = {quote.text for quote in await Quote.all()}
 
         async with DailyQuote.toscrape.playwright() as browser:
             page = await browser.new_page()
@@ -44,4 +44,4 @@ class PickQuote(Workflow):
 
     @step
     async def record(self, quote: dict[str, str]) -> None:
-        await Quote.record(text=quote["text"], author=quote["author"])
+        await Quote.create(text=quote["text"], author=quote["author"])
