@@ -5,13 +5,13 @@ from druks_daily_quote.models import Quote
 
 @ui.page("/")
 async def overview():
-    quotes = await Quote.list_newest_first()
+    quotes = await Quote.filter()
     if not quotes:
         return ui.Page(
             "Today",
             blocks=[ui.EmptyState("Nothing picked", description="The next run picks one.")],
         )
-    latest, *earlier = quotes
+    *earlier, latest = quotes
     blocks = [ui.Card(title=latest.text, description=f"— {latest.author}")]
     if earlier:
         cards = ui.Cards(
@@ -20,7 +20,7 @@ async def overview():
                     title=quote.text,
                     description=f"{quote.author} · {quote.picked_at:%d %b %Y}",
                 )
-                for quote in earlier
+                for quote in reversed(earlier)
             ]
         )
         blocks.append(ui.Section(blocks=[cards], title="Earlier"))
