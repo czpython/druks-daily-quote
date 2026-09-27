@@ -22,4 +22,5 @@ class DailyQuote(App):
         contract=QuoteChoice,
         description="Choose one quote from the page.",
         include_plugins=False,
+        include_mcp=False,
     )
