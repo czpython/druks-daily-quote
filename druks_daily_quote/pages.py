@@ -11,7 +11,7 @@ async def overview():
             "Today",
             blocks=[ui.EmptyState("Nothing picked", description="The next run picks one.")],
         )
-    *earlier, latest = quotes
+    latest, *earlier = quotes
     blocks = [ui.Card(title=latest.text, description=f"— {latest.author}")]
     if earlier:
         cards = ui.Cards(
@@ -20,7 +20,7 @@ async def overview():
                     title=quote.text,
                     description=f"{quote.author} · {quote.picked_at:%d %b %Y}",
                 )
-                for quote in reversed(earlier)
+                for quote in earlier
             ]
         )
         blocks.append(ui.Section(blocks=[cards], title="Earlier"))
