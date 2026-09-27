@@ -5,7 +5,7 @@ from druks_daily_quote.models import Quote
 
 @ui.page("/")
 async def overview():
-    quotes = await Quote.filter()
+    quotes = await Quote.all()
     if not quotes:
         return ui.Page(
             "Today",
