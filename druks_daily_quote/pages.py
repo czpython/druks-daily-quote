@@ -15,13 +15,7 @@ async def overview():
     blocks = [ui.Card(title=latest.text, description=f"— {latest.author}")]
     if earlier:
         cards = ui.Cards(
-            cards=[
-                ui.Card(
-                    title=quote.text,
-                    description=f"{quote.author} · {quote.picked_at:%d %b %Y}",
-                )
-                for quote in earlier
-            ]
+            cards=[ui.Card(title=quote.text, description=quote.author) for quote in earlier]
         )
         blocks.append(ui.Section(blocks=[cards], title="Earlier"))
-    return ui.Page("Today", description=f"{latest.picked_at:%d %B %Y}", blocks=blocks)
+    return ui.Page("Today", blocks=blocks)
